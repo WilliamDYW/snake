@@ -1,0 +1,48 @@
+*{
+    margin:0;
+    padding:0;
+    border: 0px;
+}
+body{
+    background: #444;
+}
+table{
+    border-collapse:collapse;
+    overflow: hidden;
+    border:1px solid #ddd;
+    margin:10px auto 10px auto;
+}
+td{
+    display: table-cell;
+    width:25px;
+    height:25px;
+    background: lightskyblue;
+    border:1px lightskyblue solid;
+}
+.snake{
+    background: white;
+}
+.notsnake_hard{
+    background: blue;
+}
+.notsnake_easy{
+    background: lightskyblue;
+}
+.food{
+    background: mediumvioletred;
+}
+.snake_head{
+    background: black;
+}
+.notice{
+    width:450px;
+    text-align: center;
+    margin:50px auto;
+    color:#fff;
+    font-size: 14px;
+}
+
+
+
+
+
