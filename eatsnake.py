@@ -4,7 +4,7 @@ from importlib_metadata import NullFinder
 from pymysql import connect, Error
 
 sg.theme('DarkAmber')   
-layout = [  [sg.Text('Username'),sg.InputText('ID@link.cuhk.edu.cn')],
+layout = [  [sg.Text('Username'),sg.InputText('UserName')],
             [sg.Text('Password'),sg.InputText('password')],
             [sg.Button('Login',size=(10, 1)), 
              sg.Radio('Play with an account     ', "RADIO1", default=True, size=(15, 1)),
@@ -34,27 +34,28 @@ while True:
                 conn = connect(
                     host='localhost',
                     user='root',
-                    password=123456,
-                    database='csc4001'  
+                    password='password',
+                    database='db'  
                     ) 
-                    
+                #返回是否可以登录
                 
-       
-    #返回是否可以登录
+                right_password=''
                 with conn:
-                    with conn,cursor()  as cursor:
-                        sql = 'select from password from usres where userName = \''+ username + '\''
+                    with conn.cursor()  as cursor:
+                        sql = 'select password from users where userName = \''+ username + '\''
+                        print("a")
               # 执行sql
                         cursor.execute(sql)
                # 提交事务
                         all_data = cursor.fetchall()
                         for items in all_data :
                             print (items)
-                            right_password = items
+                            right_password = items[0]
 
                 conn.commit()
             except Error as e:
                 print('连接失败：{}')
+                print(e)
 
 
             password = values[1]
@@ -66,6 +67,7 @@ while True:
         #values[2] 的值为False，直接打开游戏
         else:
             webbrowser.open_new_tab('eatSnake.html')
+            root_window.close()#if guest, close the window
     if event == 'Show List':
         '''
         To do
@@ -76,35 +78,38 @@ while True:
             conn = connect(
             host='localhost',
             user='root',
-            password=123456,
-            database='csc4001'  
+            password='password',
+            database='db'  
             ) 
    #查询前一百的数据
             with conn:
-                with conn,cursor()  as cursor:
-                    sql = 'select from score from users order by score desc limit 10'
+                scores = []
+                with conn.cursor()  as cursor:
+                    sql = 'select score from users order by score desc limit 10'
               # 执行sql
                     cursor.execute(sql)
                # 提交事务
                     all_data = cursor.fetchall()
                 for item in all_data :
-                       scores = item
+                       scores.append(item[0])
                 conn.commit()
 
-            with conn:
-                with conn,cursor()  as cursor:
-                    sql = 'select from userName from users order by score desc limit 10'
+
+                toplist = []
+                with conn.cursor()  as cursor:
+                    sql = 'select userName from users order by score desc limit 10'
               # 执行sql
                     cursor.execute(sql)
                # 提交事务
                     all_data = cursor.fetchall()
                     for item in all_data :
-                       toplist = item
+                       toplist.append(item[0])
                 conn.commit()
         except Error as e:
+            print(e)
             print('连接失败：{}')
 
-
+        #display the top ten accounts
         list_window_active = True
         root_window.Hide()
         layout2 = [[sg.Text("Username"), sg.Text("scores")],
